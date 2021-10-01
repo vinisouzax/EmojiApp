@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "627346470378",
+    "project_id": "emojiapp-4ae77",
+    "storage_bucket": "emojiapp-4ae77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627346470378:android:c8527a10cf93f2e7c46e93",
+        "android_client_info": {
+          "package_name": "com.vgondev.emojiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627346470378-cem4t2k2dshodob1npg07t5h716nj1ml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLbVpX51Tflh2lnY25I_4DYyDFElKl14w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627346470378-cem4t2k2dshodob1npg07t5h716nj1ml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627346470378:android:b8b58c5bfae66efbc46e93",
+        "android_client_info": {
+          "package_name": "om.vgondev.emojiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "627346470378-cem4t2k2dshodob1npg07t5h716nj1ml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLbVpX51Tflh2lnY25I_4DYyDFElKl14w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627346470378-cem4t2k2dshodob1npg07t5h716nj1ml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
