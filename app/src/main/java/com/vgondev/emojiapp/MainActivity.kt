@@ -1,6 +1,7 @@
 package com.vgondev.emojiapp
 
 import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -25,14 +26,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient
 
-    private val TAG = "GoogleActivity"
-    private val RC_SIGN_IN = 9001
+    private companion object LoginActivity {
+        private const val TAG = "LoginActivity"
+        private const val RC_GOOGLE_SIGN_IN = 4926
+    }
 
     private val mStartForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            result: ActivityResult ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            onActivityResult(RC_SIGN_IN, result);
-        }
+            result: ActivityResult -> onActivityResult(RC_GOOGLE_SIGN_IN, result)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
 
         FirebaseApp.initializeApp(this);
+        mAuth = Firebase.auth
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id_str))
@@ -47,8 +48,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .build()
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        mAuth = Firebase.auth
 
         val signInButton = findViewById<SignInButton>(R.id.sign_in_button)
         signInButton.setSize(SignInButton.SIZE_STANDARD)
@@ -63,25 +62,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = mAuth.currentUser
-        updateUI(currentUser)
-    }
-
     private fun onActivityResult(requestCode: Int, result: ActivityResult) {
-        if (result.resultCode == Activity.RESULT_OK) {
-            val intent = result.data
-            when (requestCode) {
-                RC_SIGN_IN -> {
-                    val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
-                    try {
-                        val account = task.getResult(ApiException::class.java)!!
-                        Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                        firebaseAuthWithGoogle(account.idToken!!)
-                    } catch (e: ApiException) {
-                        Log.w(TAG, "Google sign in failed", e)
-                    }
+        val intent = result.data
+        when (requestCode) {
+            RC_GOOGLE_SIGN_IN -> {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                try {
+                    val account = task.getResult(ApiException::class.java)!!
+                    Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    Log.w(TAG, "Google sign in failed", e)
                 }
             }
         }
@@ -96,7 +87,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     val user = mAuth.currentUser
                     updateUI(user)
                 } else {
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Log.d(TAG, "signInWithCredential:failure", task.exception)
                     updateUI(null)
                 }
             }
@@ -107,7 +98,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         mStartForResult.launch(signInIntent)
     }
 
-    private fun updateUI(user: FirebaseUser?) {
+    override fun onStart() {
+        super.onStart()
+        val currentUser = mAuth.currentUser
+        updateUI(currentUser)
+    }
 
+    private fun updateUI(user: FirebaseUser?) {
+        if (user == null) {
+            Log.w(TAG, "user not signed in.")
+            return
+        }
+        startActivity(Intent(this, EmojiActivity::class.java))
+        finish()
     }
 }
